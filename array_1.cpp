@@ -108,6 +108,72 @@ public:
             cout << "Error - index out of Range \n";
         }
     }
+
+    void Delete(int index)
+    {
+        if (index >= 0 && index < size)
+        {
+            for (int i = index; i < length - 1; i++)
+            {
+                items[i] = items[i + 1];
+            }
+            length--;
+        }
+        else
+        {
+            cout << "Error - index out of Range \n";
+        }
+    }
+
+    void Enlarge(int newsize)
+    {
+        if (newsize <= size)
+        {
+            cout << "New size must be larger than current size \n";
+        }
+        else
+        {
+            size = newsize;
+            int * old = items;
+            items = new int[newsize];
+            for (int i = 0; i < length; i++)
+            {
+                items[i] = old[i];
+            }
+            delete[]old;
+            
+        }
+        
+    }
+    
+  void Merge(Array other)
+{
+    int newsize = size + other.getSize();  // Calculate the new size by adding the current size and the size of the other array
+    size = newsize;  // Update the size of the current array
+
+    int* old = items;  // Store the pointer to the old array
+
+    items = new int[newsize];  // Create a new array with the updated size
+    int i;
+
+    // Copy the elements from the old array to the new array
+    for (i = 0; i < length; i++)
+    {
+        items[i] = old[i];  
+    }
+
+    delete[] old;  // Deallocate the memory occupied by the old array
+
+    int j = i;
+
+    // Copy the elements from the other array to the new array
+    for (int i = 0; i < other.getLength(); i++)
+    {
+       items[j++] = other.items[i];  // Copy the element from the other array to the new array and increment the index of the new array
+       length++;  // Increase the length of the current array
+    }
+}
+
 };
 
 
@@ -141,6 +207,7 @@ int main()
     else
         cout << "Item found @ position " << index << endl;
 */    
+    int index;
     int newitem;
     cout << "Enter a new item to add to the array \n";
     cin >> newitem;
@@ -155,10 +222,34 @@ int main()
     myarray.Insert(index, newitem); // Insert the item at the specified index in the array
     myarray.Display(); // Display the updated array
 
+     cout << "Enter an index and item to delete into the array";
+    cin >> index;
+    myarray.Delete(index);
+    myarray.Display(); // Display the updated array
+
     cout << "The Array Size = " <<
              myarray.getSize() << 
              " While the length = " << 
              myarray.getLength() << "\n";
 
-    return 0;
+    int newsize;
+    cout << "Enter New Size \n";
+    cin >> newsize;
+    myarray.Enlarge(newsize);
+     cout << "The Array Size = " <<
+             myarray.getSize() << 
+             " While the length = " << 
+             myarray.getLength() << "\n";
+    myarray.Display();
+
+    Array other(3);
+    other.Fill();
+    myarray.Merge(other);
+     cout << "The Array Size = " <<
+             myarray.getSize() << 
+             " While the length = " << 
+             myarray.getLength() << "\n";
+    
+    myarray.Display();
+
 }
